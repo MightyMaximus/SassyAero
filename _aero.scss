@@ -1,0 +1,112 @@
+/*! SassyAero is an open source SASS framework for an object orientated styled CSS. Developed by Aiyush Jain (MIT Licence) */
+
+/*--------------------------------------------------------------
+>>> GENERIC & HELPERS
+--------------------------------------------------------------*/
+
+%temp-bg {
+  background-color: #DFDBE5;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+  /* Thanks to HeroPatterns for the bg */
+}
+
+.temp-bg { @extend %temp-bg; }
+
+/*--------------------------------------------------------------
+>> Mixins
+--------------------------------------------------------------*/
+
+/*-------------------- > Startup < ---------------------*/
+$base-size: 16px;
+
+@mixin setBaseFontSize($size) { $base-size: $size; }
+
+@mixin setFont($font, $size, $color, $weight: normal) {
+  @include setBaseFontSize($base-size);
+  font-family: $font;
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
+@mixin setH1Size($h1) { h1 { font-size: $h1 } }
+@mixin setH1Size($h2) { h2 { font-size: $h2 } }
+@mixin setH1Size($h3) { h3 { font-size: $h3 } }
+@mixin setH1Size($h4) { h4 { font-size: $h4 } }
+@mixin setH1Size($h5) { h5 { font-size: $h5 } }
+@mixin setH1Size($h6) { h6 { font-size: $h6 } }
+
+@mixin setHeaderSizes($size-list) {
+  $i: 1;
+  @each $size in $size-list {
+    h#{$i} { font-size: $size; }
+    $i: $i + 1;
+  }
+}
+
+@mixin setHeaderSizesPxEm($size-list) { /* Decimal Precision Error: Invalid CSS (ex. 22 / 16 px = 1.375em DNW) */
+  $i: 1;
+  @each $size in $size-list {
+    $size: ($size / $base-size)em;
+    h#{$i} { font-size: $size; }
+    $i: $i + 1;
+  }
+}
+
+/*-------------- > Layout & Structure < ----------------*/
+
+@mixin flex($dir: row, $p-axis: flex-start, $c-axis: flex-start) {
+  /* Flex-Direction -- $dir (flex-direction) */
+  @if($dir == "col") { $dir: column; }
+  display: flex; // row = row (DEFAULT)
+  flex-direction: $dir; // col = column
+
+  /* Justify-Content -- $p-axis (primary axis) */
+  @if($p-axis == "fs") { $p-axis: flex-start; } // fs = flex-start (DEFAULT)
+  @else if($p-axis == "fe") { $p-axis: flex-end; } // fe = flex-end
+  @else if($p-axis == "c") { $p-axis: center; } // c = center
+  @else if($p-axis == "sb") { $p-axis: space-between; } // sb = space-between
+  @else if($p-axis == "sa") { $p-axis: space-around; } // sa = space-around
+  @else if($p-axis == "se") { $p-axis: space-evenly; } // se = space-evenly
+  justify-content: $p-axis;
+
+  /* Align-Items -- $c-axis (cross axis) */
+  @if($c-axis == "fs") { $c-axis: flex-start; } // fs = flex-start (DEFAULT)
+  @else if($c-axis == "fe") { $c-axis: flex-end; } // fe = flex-end
+  @else if($c-axis == "c") { $c-axis: center; } // c = center
+  @else if($c-axis == "b") { $c-axis: baseline; } // b = baseline
+  @else if($c-axis == "s") { $c-axis: stretch; } // s = stretch
+  align-items: $c-axis;
+}
+
+@mixin full-w { width: 100%; }
+
+@mixin full-h { height: 100vh; }
+
+@mixin row { display: flex; }
+
+@mixin col {
+  @include row;
+  flex-direction: column;
+}
+
+@mixin bg-image($imgpath, $position: 0 0, $size: cover, $repeat: no-repeat) {
+  background: {
+    image: url($imgpath);
+    position: $position;
+    repeat: $repeat;
+  }
+  background-size: $size;
+}
+
+/*--------------------------------------------------------------
+>> Classes
+--------------------------------------------------------------*/
+
+.full-w { @include full-w; }
+
+.full-h { @include full-h; }
+
+.row { @include row; }
+
+.col { @include col; }
