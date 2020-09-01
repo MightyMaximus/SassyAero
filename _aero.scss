@@ -16,13 +16,18 @@
 >> Mixins
 --------------------------------------------------------------*/
 
+/*------------------ > Constructor < -------------------*/
+
+@mixin constructor() { } /* optional, just a quick way to set up styles */
+
 /*-------------------- > Startup < ---------------------*/
 $base-size: 16px;
+$btn-size: 16px; // btn font size
 
 @mixin setBaseFontSize($size) { $base-size: $size; }
+@mixin setLinkSize($size) { $btn-size: $size; }
 
-@mixin setFont($font, $size, $color, $weight: normal) {
-  @include setBaseFontSize($base-size);
+@mixin setFont($font, $size, $color: #000000, $weight: normal) {
   font-family: $font;
   font-size: $size;
   font-weight: $weight;
@@ -39,7 +44,7 @@ $base-size: 16px;
 @mixin setHeaderSizes($size-list) {
   $i: 1;
   @each $size in $size-list {
-    h#{$i} { font-size: $size; }
+    h#{$i} { font-size: $size; margin: 0; }
     $i: $i + 1;
   }
 }
@@ -57,7 +62,9 @@ $base-size: 16px;
 
 @mixin flex($dir: row, $p-axis: flex-start, $c-axis: flex-start) {
   /* Flex-Direction -- $dir (flex-direction) */
-  @if($dir == "col") { $dir: column; }
+  @if($dir == "col") {
+    $dir: column;
+  }
   display: flex; // row = row (DEFAULT)
   flex-direction: $dir; // col = column
 
@@ -85,10 +92,7 @@ $base-size: 16px;
 
 @mixin row { display: flex; }
 
-@mixin col {
-  @include row;
-  flex-direction: column;
-}
+@mixin col { @include row; flex-direction: column; }
 
 @mixin bg-image($imgpath, $position: 0 0, $size: cover, $repeat: no-repeat) {
   background: {
@@ -97,6 +101,29 @@ $base-size: 16px;
     repeat: $repeat;
   }
   background-size: $size;
+}
+
+@mixin btn($color, $bg-color, $border: none, $font-size: $btn-size,) {
+  font-size: $font-size;
+  text-decoration: none;
+  text-align: center;
+  color: $color;
+  background-color: $bg-color;
+  border: $border;
+}
+
+@mixin rect($width, $height, $bg-color) {
+  width: $width;
+  height: $height;
+  background-color: $bg-color;
+}
+
+@mixin rotate($deg) {
+  transform: rotate($deg);
+  -webkit-transform: rotate($deg);
+  -moz-transform: rotate($deg);
+  -ms-transform: rotate($deg);
+  -o-transform: rotate($deg);
 }
 
 /*--------------------------------------------------------------
@@ -110,3 +137,36 @@ $base-size: 16px;
 .row { @include row; }
 
 .col { @include col; }
+
+/*--------------------------------------------------------------
+>> Defaults
+--------------------------------------------------------------*/
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+hr { /* A better looking default horizontal rule */
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+fieldset { /* Remove default fieldset styles. */
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+textarea { /* Allow only vertical resizing of textareas. */
+  resize: vertical;
+}
